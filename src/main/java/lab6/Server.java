@@ -46,7 +46,7 @@ public class Server {
         keeper = new ZooKeeper(zookeeperConnectString,
                 (int)timeout.getSeconds() * 1000, watcher);
 
-        keeper.create("servers/" + PORT, (PORT+"").getBytes(),
+        keeper.create("/servers/" + PORT, (PORT+"").getBytes(),
                 ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
         PORT = Integer.parseInt(argv[0]);
         ActorSystem system = ActorSystem.create("routes");
