@@ -20,7 +20,7 @@ public class ConfActor extends AbstractActor {
                     servers.addAll(msg.getServers());
                 })
                 .match(GetServer.class, msg->{
-                    int index = ThreadLocalRandom.current().nextInt(servers.size())
+                    int index = ThreadLocalRandom.current().nextInt(servers.size());
                     sender().tell();
                 })
                 .build();
