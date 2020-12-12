@@ -73,7 +73,7 @@ public class Server {
                 watchedEvent.getType() == Watcher.Event.EventType.NodeDeleted ||
                 watchedEvent.getType() == Watcher.Event.EventType.NodeDataChanged){
             for(String s: keeper.getChildren("/servers", this)){
-                
+                byte[] port = 
             }
         }
     };
