@@ -37,6 +37,7 @@ public class Server {
     public static Http http;
 
     public static void main(String[] argv) throws IOException {
+        PORT = Integer.parseInt(argv[0]);
         ActorSystem system = ActorSystem.create("routes");
         http = Http.get(system);
         final ActorMaterializer materializer = ActorMaterializer.create(system);
