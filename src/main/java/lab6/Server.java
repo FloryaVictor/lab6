@@ -20,6 +20,7 @@ import lab6.Messages.GetServer;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
+import org.apache.zookeeper.data.ACL;
 import scala.concurrent.Future;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class Server {
 
         keeper = new ZooKeeper(zookeeperConnectString,
                 (int)timeout.getSeconds() * 1000, watcher);
-        keeper.create("servers/" + PORT, (PORT+"").getBytes(), 1);
+        keeper.create("servers/" + PORT, (PORT+"").getBytes(), ZOO_PERM_ALL, );
         PORT = Integer.parseInt(argv[0]);
         ActorSystem system = ActorSystem.create("routes");
         http = Http.get(system);
