@@ -8,14 +8,16 @@ import org.apache.zookeeper.KeeperException;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
 
+import java.io.IOException;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] argv)  {
+    public static void main(String[] argv) throws IOException {
         ActorSystem system = ActorSystem.create("routes");
         final Http http = Http.get(system);
         final ActorMaterializer materializer = ActorMaterializer.create(system);
         Server s = new Server(8080, system, materializer, null);
+        s.start();
     }
 
 }
