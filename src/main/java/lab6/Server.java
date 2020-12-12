@@ -17,6 +17,7 @@ import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import lab6.Messages.GetServer;
+import org.apache.zookeeper.ZooKeeper;
 import scala.concurrent.Future;
 
 import java.io.IOException;
@@ -38,6 +39,8 @@ public class Server {
     public static ActorRef confActor;
 
     public static void main(String[] argv) throws IOException {
+        ZooKeeper keeper = 
+
         PORT = Integer.parseInt(argv[0]);
         ActorSystem system = ActorSystem.create("routes");
         http = Http.get(system);
