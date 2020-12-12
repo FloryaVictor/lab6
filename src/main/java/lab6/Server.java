@@ -33,8 +33,8 @@ public class Server {
     private final static Duration timeout = Duration.ofSeconds(5);
     public static int PORT;
     public static String HOST = "localhost";
-
     public static Http http;
+    public static ActorRef confActor;
 
     public static void main(String[] argv) throws IOException {
         PORT = Integer.parseInt(argv[0]);
