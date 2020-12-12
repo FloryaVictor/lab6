@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ConfActor extends AbstractActor {
     ArrayList<String> servers = new ArrayList<>();
-    Random rand = new
+    Random rand = new Random();
     @Override
     public Receive createReceive() {
         return ReceiveBuilder
@@ -22,7 +22,7 @@ public class ConfActor extends AbstractActor {
                 })
                 .match(GetServer.class, msg->{
                     int index =
-                    sender().tell(servers.get());
+                    sender().tell(servers.get(rand.nextInt()));
                 })
                 .build();
     }
