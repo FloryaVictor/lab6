@@ -13,13 +13,16 @@ import akka.http.javadsl.model.Query;
 import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
+import lab6.Messages.GetServer;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.concurrent.CompletionStage;
 
 public class Server {
     public static final String URL = "url";
     public static final String COUNT = "count";
+    private final static Duration timeout = Duration.ofSeconds(5);
 
     public final Http http;
     public final int port;
@@ -48,7 +51,11 @@ public class Server {
                     String url = q.get(URL).get();
                     int count = Integer.parseInt(q.get(COUNT).get());
                     if (count >=0){
-                        return Patterns.ask()
+                        return Patterns.ask(confActor, new GetServer(), timeout)
+                                .thenApply(sport -> {
+                                    int nextPort = Integer.parseInt((String)sport);
+                                    return fetch(String.format("{}"))
+                                })
                     }else {
                         return fetch(url).thenApply(
                                 resp ->{return resp;}
