@@ -8,7 +8,6 @@ import lab6.Messages.RefreshList;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class ConfActor extends AbstractActor {
     ArrayList<String> servers = new ArrayList<>();
