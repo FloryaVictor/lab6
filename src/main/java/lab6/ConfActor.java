@@ -6,11 +6,12 @@ import lab6.Messages.GetServer;
 import lab6.Messages.RefreshList;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class ConfActor extends AbstractActor {
     ArrayList<String> servers = new ArrayList<>();
-    
+    Random rand = new
     @Override
     public Receive createReceive() {
         return ReceiveBuilder
