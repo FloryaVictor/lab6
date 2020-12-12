@@ -40,11 +40,13 @@ public class Server {
     public static final String zookeeperConnectString  = "localhost:2181";
     public static Http http;
     public static ActorRef confActor;
+    public static ZooKeeper keeper;
 
     public static void main(String[] argv) throws IOException {
 
-        ZooKeeper keeper = new ZooKeeper(zookeeperConnectString,
+        keeper = new ZooKeeper(zookeeperConnectString,
                 (int)timeout.getSeconds() * 1000, watcher);
+        keeper.create("")
         PORT = Integer.parseInt(argv[0]);
         ActorSystem system = ActorSystem.create("routes");
         http = Http.get(system);
@@ -66,7 +68,11 @@ public class Server {
     }
 
     public static Watcher watcher = watchedEvent -> {
+        if (watchedEvent.getType() == Watcher.Event.EventType.NodeCreated ||
+                watchedEvent.getType() == Watcher.Event.EventType.NodeDeleted ||
+                watchedEvent.getType() == Watcher.Event.EventType.NodeDataChanged){
 
+        }
     };
 
     private static CompletionStage<HttpResponse> fetch(String url) {
