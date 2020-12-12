@@ -72,7 +72,9 @@ public class Server {
         if (watchedEvent.getType() == Watcher.Event.EventType.NodeCreated ||
                 watchedEvent.getType() == Watcher.Event.EventType.NodeDeleted ||
                 watchedEvent.getType() == Watcher.Event.EventType.NodeDataChanged){
-            for(String s: keeper.getChildren("/servers"))
+            for(String s: keeper.getChildren("/servers", this)){
+                
+            }
         }
     };
 
