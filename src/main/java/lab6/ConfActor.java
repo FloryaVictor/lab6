@@ -21,6 +21,7 @@ public class ConfActor extends AbstractActor {
                 })
                 .match(GetServer.class, msg->{
                     String s = servers.get(rand.nextInt(servers.size()));
+                    System.out.println("sdfffffff" + s +"fdssssssss");
                     getSender().tell(s, ActorRef.noSender());
                 })
                 .build();
