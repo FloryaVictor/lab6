@@ -46,7 +46,7 @@ public class Server {
 
         keeper = new ZooKeeper(zookeeperConnectString,
                 (int)timeout.getSeconds() * 1000, watcher);
-        keeper.create("")
+        keeper.create("servers/" + PORT, (PORT+"").getBytes(), 1);
         PORT = Integer.parseInt(argv[0]);
         ActorSystem system = ActorSystem.create("routes");
         http = Http.get(system);
