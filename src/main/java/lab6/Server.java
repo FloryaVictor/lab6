@@ -113,7 +113,7 @@ public class Server {
                                             .thenCompose(nextPort ->
                                                     fetch(String.format(
                                                         "http://%s:%s?url=%s&count=%d",
-                                                        HOST, null, url, Integer.parseInt(count) - 1))));
+                                                        HOST, nextPort, url, Integer.parseInt(count) - 1))));
                                 })
                         )
                 )
