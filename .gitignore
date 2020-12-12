@@ -25,5 +25,3 @@ hs_err_pid*
 .idea
 pom.xml
 target/*
-start.sh
-stop.sh
