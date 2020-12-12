@@ -17,6 +17,7 @@ import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import lab6.Messages.GetServer;
+import lab6.Messages.RefreshList;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.ACL;
 import scala.concurrent.Future;
@@ -72,9 +73,15 @@ public class Server {
         if (watchedEvent.getType() == Watcher.Event.EventType.NodeCreated ||
                 watchedEvent.getType() == Watcher.Event.EventType.NodeDeleted ||
                 watchedEvent.getType() == Watcher.Event.EventType.NodeDataChanged){
-            ArrayList<String> newServers;
-            for(String s: keeper.getChildren("/servers", this)){
-                byte[] port = keeper.getData("/servers/" + s, false, null);
+            ArrayList<String> newServers = new ArrayList<>();
+            try {
+                for(String s: keeper.getChildren("/servers", null)){
+                    byte[] port = keeper.getData("/servers/" + s, false, null);
+                    newServers.add(new String(port));
+                }
+                confActor.tell(new RefreshList(newServers), ActorRef.noSender());
+            } catch (KeeperException | InterruptedException e) {
+                e.printStackTrace();
             }
         }
     };
