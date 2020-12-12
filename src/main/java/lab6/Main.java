@@ -18,7 +18,6 @@ public class Main {
         final ActorMaterializer materializer = ActorMaterializer.create(system);
         Server s = new Server(Integer.parseInt(argv[0]), system, materializer, null);
         s.start();
-        System.out.println();
     }
 
 }
