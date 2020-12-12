@@ -53,12 +53,13 @@ public class Server {
     }
 
     public void start() throws IOException {
+        final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
+                createRoute().flow(system, mat);
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,
                 ConnectHttp.toHost(host, port),
                 mat
         );
-        System.out.println("Server online at http://localhost:8080/\nPress RETURN to stop...");
         System.in.read();
         binding
                 .thenCompose(ServerBinding::unbind)
@@ -66,7 +67,7 @@ public class Server {
                 });
     }
 
-    public Route createRoute(ActorSystem system, ActorRef routerActor) {
+    public Route createRoute() {
         return route(get(() ->
                         parameter("url", url ->
                                 parameter("count", count -> {
