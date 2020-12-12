@@ -15,7 +15,8 @@ import java.io.IOException;
 import java.util.concurrent.CompletionStage;
 
 public class Server {
-    public static final String URL = "url"
+    public static final String URL = "url";
+    public static final String COUNT = "count";
 
     public final int port;
     public final String host;
@@ -32,7 +33,7 @@ public class Server {
         return Flow.of(HttpRequest.class)
                 .map(req->{
                     Query q = req.getUri().query();
-                    String url = q.get()
+                    String url = q.get(URL).get();
                 })
     }
     public void start(){
