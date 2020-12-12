@@ -31,43 +31,35 @@ public class Server {
     public static final String URL = "url";
     public static final String COUNT = "count";
     private final static Duration timeout = Duration.ofSeconds(5);
+    public static int PORT;
+    public static String HOST = "localhost";
 
-    public final Http http;
-    public final int port;
-    public final String host;
-    public final ActorSystem system;
-    public final ActorMaterializer mat;
-    public final ActorRef confActor;
+    public static Http http;
 
-    public Server(int port, ActorSystem system, ActorMaterializer mat, ActorRef confActor){
-        this.port = port;
-        this.host = "localhost";
-        this.system = system;
-        this.mat = mat;
-        this.confActor = confActor;
+    public static void main(String[] argv) throws IOException {
+        ActorSystem system = ActorSystem.create("routes");
         http = Http.get(system);
-    }
-
-    private CompletionStage<HttpResponse> fetch(String url) {
-        return http.singleRequest(HttpRequest.create(url));
-    }
-
-    public void start() throws IOException {
+        final ActorMaterializer materializer = ActorMaterializer.create(system);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
-                createRoute().flow(system, mat);
+                createRoute().flow(system, materializer);
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,
-                ConnectHttp.toHost(host, port),
-                mat
+                ConnectHttp.toHost(HOST, PORT),
+                materializer
         );
         System.in.read();
         binding
                 .thenCompose(ServerBinding::unbind)
                 .thenAccept(unbound ->{
+                    system.terminate();
                 });
     }
 
-    public Route createRoute() {
+    private static CompletionStage<HttpResponse> fetch(String url) {
+        return http.singleRequest(HttpRequest.create(url));
+    }
+
+    public static Route createRoute() {
         return route(get(() ->
                         parameter("url", url ->
                                 parameter("count", count -> {
@@ -75,14 +67,14 @@ public class Server {
                                         return completeWithFuture(fetch(url));
                                     }
                                     String nextPort = null;
-                                    try {
-                                        nextPort = (String)Patterns.ask(confActor, new GetServer(), timeout).toCompletableFuture().get();
-                                    } catch (InterruptedException | ExecutionException e) {
-                                        e.printStackTrace();
-                                    }
+//                                    try {
+////                                        nextPort = (String)Patterns.ask(confActor, new GetServer(), timeout).toCompletableFuture().get();
+//                                    } catch (InterruptedException | ExecutionException e) {
+//                                        e.printStackTrace();
+//                                    }
                                     return completeWithFuture(fetch(String.format(
                                             "%s:%s?url=%s&count=%d",
-                                            host, nextPort, url, Integer.parseInt(count) - 1)));
+                                            HOST, null, url, Integer.parseInt(count) - 1)));
                                 })
                         )
                 )

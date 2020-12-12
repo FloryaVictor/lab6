@@ -12,12 +12,6 @@ import java.io.IOException;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] argv) throws IOException {
-        ActorSystem system = ActorSystem.create("routes");
-        final Http http = Http.get(system);
-        final ActorMaterializer materializer = ActorMaterializer.create(system);
-//        Server s = new Server(Integer.parseInt(argv[0]), system, materializer, null);
-//        s.start();
-    }
+
 
 }
