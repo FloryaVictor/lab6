@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class ConfActor extends AbstractActor {
     ArrayList<String> servers = new ArrayList<>();
-
+    
     @Override
     public Receive createReceive() {
         return ReceiveBuilder
