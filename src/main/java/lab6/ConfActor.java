@@ -6,6 +6,7 @@ import lab6.Messages.GetServer;
 import lab6.Messages.RefreshList;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ConfActor extends AbstractActor {
     ArrayList<String> servers = new ArrayList<>();
@@ -19,7 +20,7 @@ public class ConfActor extends AbstractActor {
                     servers.addAll(msg.getServers());
                 })
                 .match(GetServer.class, msg->{
-                    int index = 
+                    int index = ThreadLocalRandom
                     sender().tell();
                 })
                 .build();
