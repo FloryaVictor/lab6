@@ -54,8 +54,10 @@ public class Server {
                         return Patterns.ask(confActor, new GetServer(), timeout)
                                 .thenApply(sport -> {
                                     int nextPort = Integer.parseInt((String)sport);
-                                    return fetch(String.format("%s:%d?url=%s&count=%d", host, port, url, nextPort));
-                                })
+                                    return fetch(String.format("%s:%d?url=%s&count=%d", host, port, url, nextPort)).thenApply(
+                                            resp -> resp
+                                    );
+                                });
                     }else {
                         return fetch(url).thenApply(
                                 resp ->{return resp;}
