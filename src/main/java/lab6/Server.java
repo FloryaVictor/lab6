@@ -88,17 +88,9 @@ public class Server {
                 (int)timeout.getSeconds() * 1000, watcher);
         keeper.create("/servers/" + PORT, (PORT+"").getBytes(),
                 ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
-        try {
-            ArrayList<String> newServers = new ArrayList<>();
-            for(String s: keeper.getChildren("/servers", null)) {
-                byte[] port = keeper.getData("/servers/" + s, false, null);
-                newServers.add(new String(port));
-
-            }
-            confActor.tell(new RefreshList(newServers), ActorRef.noSender());
-        } catch (KeeperException | InterruptedException e) {
-            e.printStackTrace();
-        }
+        WatchedEvent e = new WatchedEvent(Watcher.Event.EventType.NodeCreated,
+                Watcher.Event.KeeperState.SyncConnected, "");
+        watcher.process(e);
     }
 
 
@@ -117,8 +109,8 @@ public class Server {
                                             .thenApply(nextPort -> (String)nextPort)
                                             .thenCompose(nextPort ->
                                                     fetch(String.format(
-                                                        "http://%s:%s?url=%s&count=%d",
-                                                        HOST, nextPort, url, Integer.parseInt(count) - 1))));
+                                                            "http://%s:%s?url=%s&count=%d",
+                                                            HOST, nextPort, url, Integer.parseInt(count) - 1))));
                                 })
                         )
                 )
