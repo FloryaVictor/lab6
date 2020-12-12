@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ExecutionException;
 
 import static akka.http.javadsl.server.Directives.*;
 import static akka.pattern.Patterns.ask;
@@ -72,12 +73,15 @@ public class Server {
                                     if (Integer.parseInt(count) <= 0){
                                         return completeWithFuture(fetch(url));
                                     }
-                                    return completeWithFuture(
-                                            Patterns.ask(confActor, new GetServer(), timeout)
-                                            .thenApply(
-                                                    
-                                            )
-                                    );
+                                    String nextPort = null;
+                                    try {
+                                        nextPort = (String)Patterns.ask(confActor, new GetServer(), timeout).toCompletableFuture().get();
+                                    } catch (InterruptedException | ExecutionException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return completeWithFuture(fetch(String.format(
+                                            "%s:%s?url=%s&count=%d",
+                                            host, nextPort, url, Integer.parseInt(count) - 1)));
                                 })
                         )
                 )
