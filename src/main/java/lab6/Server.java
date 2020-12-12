@@ -44,6 +44,9 @@ public class Server {
     public static ZooKeeper keeper;
 
     public static void main(String[] argv) throws IOException, KeeperException, InterruptedException {
+        ActorSystem system = ActorSystem.create("routes");
+        http = Http.get(system);
+        confActor = system.actorOf(Props.create(ConfActor.class));
         PORT = Integer.parseInt(argv[0]);
         keeper = new ZooKeeper(zookeeperConnectString,
                 (int)timeout.getSeconds() * 1000, watcher);
@@ -60,9 +63,7 @@ public class Server {
         } catch (KeeperException | InterruptedException e) {
             e.printStackTrace();
         }
-        ActorSystem system = ActorSystem.create("routes");
-        http = Http.get(system);
-        confActor = system.actorOf(Props.create(ConfActor.class));
+
         final ActorMaterializer materializer = ActorMaterializer.create(system);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
                 createRoute().flow(system, materializer);
