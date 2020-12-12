@@ -19,9 +19,9 @@ public class Main {
         Server s = new Server(8081, system, materializer, null);
         Server s1 = new Server(8082, system, materializer, null);
         Server s2 = new Server(8083, system, materializer, null);
+        s2.start();
         s1.start();
         s.start();
-        s2.start();
     }
 
 }
