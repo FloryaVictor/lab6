@@ -97,6 +97,11 @@ public class Server {
                                     if (Integer.parseInt(count) <= 0){
                                         return completeWithFuture(fetch(url));
                                     }
+                                    try {
+                                        System.out.println(Patterns.ask(confActor, new GetServer(), timeout).toCompletableFuture().get());
+                                    } catch (InterruptedException | ExecutionException e) {
+                                        e.printStackTrace();
+                                    }
                                     return completeWithFuture(Patterns.ask(confActor, new GetServer(), timeout)
                                             .thenApply(nextPort -> (String)nextPort)
                                             .thenCompose(nextPort ->
