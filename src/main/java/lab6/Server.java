@@ -17,6 +17,8 @@ import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 import lab6.Messages.GetServer;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
 import scala.concurrent.Future;
 
@@ -39,7 +41,9 @@ public class Server {
     public static ActorRef confActor;
 
     public static void main(String[] argv) throws IOException {
-        ZooKeeper keeper = new ZooKeeper(HOST + ":" + PORT, timeout., null
+
+        ZooKeeper keeper = new ZooKeeper(HOST + ":" + PORT,
+                (int)timeout.getSeconds() * 1000, watcher);
         PORT = Integer.parseInt(argv[0]);
         ActorSystem system = ActorSystem.create("routes");
         http = Http.get(system);
@@ -59,6 +63,10 @@ public class Server {
                     system.terminate();
                 });
     }
+
+    public static Watcher watcher = watchedEvent -> {
+
+    };
 
     private static CompletionStage<HttpResponse> fetch(String url) {
         return http.singleRequest(HttpRequest.create(url));
