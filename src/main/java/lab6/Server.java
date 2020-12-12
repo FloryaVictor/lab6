@@ -70,7 +70,7 @@ public class Server {
                         parameter("url", url ->
                                 parameter("count", count -> {
                                     if (Integer.parseInt(count) <= 0){
-                                        return CompleteWithFuture
+                                        return completeWithFuture()
                                     }
                                     return Patterns.ask(confActor, new GetServer(), timeout);
                                 })
