@@ -54,7 +54,7 @@ public class Server {
                         return Patterns.ask(confActor, new GetServer(), timeout)
                                 .thenApply(sport -> {
                                     int nextPort = Integer.parseInt((String)sport);
-                                    return fetch(String.format("{}"))
+                                    return fetch(String.format("%s:%d?url=%s&count=%d", host, port, url, nextPort));
                                 })
                     }else {
                         return fetch(url).thenApply(
