@@ -39,26 +39,25 @@ public class Server {
     public static ActorRef confActor;
 
     public static void main(String[] argv) throws IOException {
-//        ZooKeeper keeper = new ZooKeeper(HOST + ":" + PORT, )
-            System.out.println("1" + 2);
-//        PORT = Integer.parseInt(argv[0]);
-//        ActorSystem system = ActorSystem.create("routes");
-//        http = Http.get(system);
-//        confActor = system.actorOf(Props.create(ConfActor.class));
-//        final ActorMaterializer materializer = ActorMaterializer.create(system);
-//        final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
-//                createRoute().flow(system, materializer);
-//        final CompletionStage<ServerBinding> binding = http.bindAndHandle(
-//                routeFlow,
-//                ConnectHttp.toHost(HOST, PORT),
-//                materializer
-//        );
-//        System.in.read();
-//        binding
-//                .thenCompose(ServerBinding::unbind)
-//                .thenAccept(unbound ->{
-//                    system.terminate();
-//                });
+        ZooKeeper keeper = new ZooKeeper(HOST + ":" + PORT, )
+        PORT = Integer.parseInt(argv[0]);
+        ActorSystem system = ActorSystem.create("routes");
+        http = Http.get(system);
+        confActor = system.actorOf(Props.create(ConfActor.class));
+        final ActorMaterializer materializer = ActorMaterializer.create(system);
+        final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
+                createRoute().flow(system, materializer);
+        final CompletionStage<ServerBinding> binding = http.bindAndHandle(
+                routeFlow,
+                ConnectHttp.toHost(HOST, PORT),
+                materializer
+        );
+        System.in.read();
+        binding
+                .thenCompose(ServerBinding::unbind)
+                .thenAccept(unbound ->{
+                    system.terminate();
+                });
     }
 
     private static CompletionStage<HttpResponse> fetch(String url) {
