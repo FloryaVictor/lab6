@@ -35,13 +35,14 @@ import static akka.pattern.Patterns.ask;
 public class Server {
     public static final String URL = "url";
     public static final String COUNT = "count";
-    private final static Duration timeout = Duration.ofSeconds(5);
-    public static int PORT;
+    private static final Duration timeout = Duration.ofSeconds(5);
     public static final String HOST = "localhost";
     public static final String zookeeperConnectString  = "localhost:2181";
     public static Http http;
     public static ActorRef confActor;
     public static ZooKeeper keeper;
+    public static int PORT;
+
 
     public static void main(String[] argv) throws IOException, KeeperException, InterruptedException {
         ActorSystem system = ActorSystem.create("routes");
@@ -96,6 +97,10 @@ public class Server {
             }
         }
     };
+
+    public static void initZooKeeper(){
+        
+    }
 
     private static CompletionStage<HttpResponse> fetch(String url) {
         return http.singleRequest(HttpRequest.create(url));
