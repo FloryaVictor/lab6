@@ -11,7 +11,7 @@ import org.apache.zookeeper.ZooKeeper;
 import java.io.IOException;
 import java.util.List;
 
-public class Main {
+public class App {
 
 
 }
