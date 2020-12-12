@@ -66,13 +66,13 @@ public class Server {
     }
 
     public Route createRoute(ActorSystem system, ActorRef routerActor) {
-        return route(pathSingleSlash(() ->
+        return route(get(() ->
                         parameter("url", url ->
                                 parameter("count", count -> {
                                     if (Integer.parseInt(count) <= 0){
                                         return fetch(url);
                                     }
-                                    String nextPort = Patterns.ask(confActor, new GetServer(), timeout);
+                                    return Patterns.ask(confActor, new GetServer(), timeout);
                                 })
                         )
                 )
