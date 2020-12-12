@@ -18,26 +18,41 @@ public class Server {
     public static final String URL = "url";
     public static final String COUNT = "count";
 
+    public final Http http;
     public final int port;
     public final String host;
     public final ActorSystem system;
     public final ActorMaterializer mat;
+
     public Server(int port, ActorSystem system, ActorMaterializer mat){
         this.port = port;
         this.system = system;
         this.mat = mat;
         this.host = "localhost";
+        http = Http.get(system);
     }
 
-    public static Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorMaterializer mat){
+    private CompletionStage<HttpResponse> fetch(String url) {
+        return http.singleRequest(HttpRequest.create(url));
+    }
+
+    private Flow<HttpRequest, HttpResponse, NotUsed> createFlow(ActorMaterializer mat){
         return Flow.of(HttpRequest.class)
                 .map(req->{
                     Query q = req.getUri().query();
                     String url = q.get(URL).get();
-                })
+                    int count = Integer.parseInt(q.get(COUNT).get());
+                    if (count >=0){
+                        return
+                    }else {
+                        return fetch(url).thenApply(
+                                resp ->{return resp;}
+                        );
+                    }
+                });
     }
     public void start(){
-        final Http http = Http.get(system);
+
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,
                 ConnectHttp.toHost(host, port),
