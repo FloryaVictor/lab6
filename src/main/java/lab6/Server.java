@@ -19,6 +19,7 @@ import akka.stream.javadsl.Flow;
 import lab6.Messages.GetServer;
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.ACL;
 import scala.concurrent.Future;
@@ -47,7 +48,7 @@ public class Server {
 
         keeper = new ZooKeeper(zookeeperConnectString,
                 (int)timeout.getSeconds() * 1000, watcher);
-        keeper.create("servers/" + PORT, (PORT+"").getBytes(), ZOO_PERM_ALL, );
+        keeper.create("servers/" + PORT, (PORT+"").getBytes(), ZooDefs.Perms.ALL, );
         PORT = Integer.parseInt(argv[0]);
         ActorSystem system = ActorSystem.create("routes");
         http = Http.get(system);
