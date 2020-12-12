@@ -47,9 +47,19 @@ public class Server {
         PORT = Integer.parseInt(argv[0]);
         keeper = new ZooKeeper(zookeeperConnectString,
                 (int)timeout.getSeconds() * 1000, watcher);
-
         keeper.create("/servers/" + PORT, (PORT+"").getBytes(),
                 ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
+        try {
+            ArrayList<String> newServers = new ArrayList<>();
+            for(String s: keeper.getChildren("/servers", null)) {
+                byte[] port = keeper.getData("/servers/" + s, false, null);
+                newServers.add(new String(port));
+
+            }
+            confActor.tell(new RefreshList(newServers), ActorRef.noSender());
+        } catch (KeeperException | InterruptedException e) {
+            e.printStackTrace();
+        }
         ActorSystem system = ActorSystem.create("routes");
         http = Http.get(system);
         confActor = system.actorOf(Props.create(ConfActor.class));
@@ -96,11 +106,6 @@ public class Server {
                                 parameter("count", count -> {
                                     if (Integer.parseInt(count) <= 0){
                                         return completeWithFuture(fetch(url));
-                                    }
-                                    try {
-                                        System.out.println(Patterns.ask(confActor, new GetServer(), timeout).toCompletableFuture().get());
-                                    } catch (InterruptedException | ExecutionException e) {
-                                        e.printStackTrace();
                                     }
                                     return completeWithFuture(Patterns.ask(confActor, new GetServer(), timeout)
                                             .thenApply(nextPort -> (String)nextPort)
