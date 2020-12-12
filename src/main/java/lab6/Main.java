@@ -16,7 +16,7 @@ public class Main {
         ActorSystem system = ActorSystem.create("routes");
         final Http http = Http.get(system);
         final ActorMaterializer materializer = ActorMaterializer.create(system);
-        Server s = new Server(8080, system, materializer, null);
+        Server s = new Server(8081, system, materializer, null);
         s.start();
     }
 
