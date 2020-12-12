@@ -77,7 +77,6 @@ public class Server {
             try {
                 for(String s: keeper.getChildren("/servers", null)){
                     byte[] port = keeper.getData("/servers/" + s, false, null);
-                    System.out.println(Arrays.toString(port));
                     newServers.add(new String(port));
                 }
                 confActor.tell(new RefreshList(newServers), ActorRef.noSender());
