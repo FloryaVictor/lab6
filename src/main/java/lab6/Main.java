@@ -17,7 +17,9 @@ public class Main {
         final Http http = Http.get(system);
         final ActorMaterializer materializer = ActorMaterializer.create(system);
         Server s = new Server(8081, system, materializer, null);
+        Server s1 = new Server(8082, system, materializer, null);
         s.start();
+        s1.start();
     }
 
 }

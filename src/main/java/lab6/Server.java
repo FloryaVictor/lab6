@@ -72,8 +72,6 @@ public class Server {
                         parameter("url", url ->
                                 parameter("count", count -> {
                                     if (Integer.parseInt(count) <= 0){
-                                        System.out.println(url);
-                                        System.out.println(count);
                                         return completeWithFuture(fetch(url));
                                     }
                                     String nextPort = null;
