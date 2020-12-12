@@ -49,22 +49,7 @@ public class Server {
         http = Http.get(system);
         confActor = system.actorOf(Props.create(ConfActor.class));
         PORT = Integer.parseInt(argv[0]);
-        keeper = new ZooKeeper(zookeeperConnectString,
-                (int)timeout.getSeconds() * 1000, watcher);
-        keeper.create("/servers/" + PORT, (PORT+"").getBytes(),
-                ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
-        try {
-            ArrayList<String> newServers = new ArrayList<>();
-            for(String s: keeper.getChildren("/servers", null)) {
-                byte[] port = keeper.getData("/servers/" + s, false, null);
-                newServers.add(new String(port));
-
-            }
-            confActor.tell(new RefreshList(newServers), ActorRef.noSender());
-        } catch (KeeperException | InterruptedException e) {
-            e.printStackTrace();
-        }
-
+        initZooKeeper();
         final ActorMaterializer materializer = ActorMaterializer.create(system);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
                 createRoute().flow(system, materializer);
@@ -98,9 +83,24 @@ public class Server {
         }
     };
 
-    public static void initZooKeeper(){
-        
+    public static void initZooKeeper() throws IOException, KeeperException, InterruptedException {
+        keeper = new ZooKeeper(zookeeperConnectString,
+                (int)timeout.getSeconds() * 1000, watcher);
+        keeper.create("/servers/" + PORT, (PORT+"").getBytes(),
+                ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
+        try {
+            ArrayList<String> newServers = new ArrayList<>();
+            for(String s: keeper.getChildren("/servers", null)) {
+                byte[] port = keeper.getData("/servers/" + s, false, null);
+                newServers.add(new String(port));
+
+            }
+            confActor.tell(new RefreshList(newServers), ActorRef.noSender());
+        } catch (KeeperException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
+
 
     private static CompletionStage<HttpResponse> fetch(String url) {
         return http.singleRequest(HttpRequest.create(url));
@@ -108,8 +108,8 @@ public class Server {
 
     public static Route createRoute() {
         return route(get(() ->
-                        parameter("url", url ->
-                                parameter("count", count -> {
+                        parameter(URL, url ->
+                                parameter(COUNT, count -> {
                                     if (Integer.parseInt(count) <= 0){
                                         return completeWithFuture(fetch(url));
                                     }
