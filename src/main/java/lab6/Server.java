@@ -4,6 +4,7 @@ import akka.NotUsed;
 import akka.actor.Actor;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import akka.actor.Props;
 import akka.http.javadsl.ConnectHttp;
 import akka.http.javadsl.Http;
 import akka.http.javadsl.ServerBinding;
@@ -40,7 +41,7 @@ public class Server {
         PORT = Integer.parseInt(argv[0]);
         ActorSystem system = ActorSystem.create("routes");
         http = Http.get(system);
-        confActor = 
+        confActor = system.actorOf(Props.create(ConfActor.class));
         final ActorMaterializer materializer = ActorMaterializer.create(system);
         final Flow<HttpRequest, HttpResponse, NotUsed> routeFlow =
                 createRoute().flow(system, materializer);
