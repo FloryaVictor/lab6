@@ -72,7 +72,12 @@ public class Server {
                                     if (Integer.parseInt(count) <= 0){
                                         return completeWithFuture(fetch(url));
                                     }
-                                    return Patterns.ask(confActor, new GetServer(), timeout);
+                                    return completeWithFuture(
+                                            Patterns.ask(confActor, new GetServer(), timeout)
+                                            .thenApply(
+                                                    
+                                            )
+                                    );
                                 })
                         )
                 )
