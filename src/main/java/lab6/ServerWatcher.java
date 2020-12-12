@@ -15,7 +15,7 @@ public class ServerWatcher implements Watcher {
     public void process(WatchedEvent watchedEvent) {
         if (watchedEvent.getType() == Event.EventType.NodeDeleted ||
             watchedEvent.getType() == Event.EventType.NodeCreated){
-            
+
             watchedEvent.
         }
     }

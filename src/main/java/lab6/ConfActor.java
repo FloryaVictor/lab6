@@ -17,8 +17,7 @@ public class ConfActor extends AbstractActor {
         return ReceiveBuilder
                 .create()
                 .match(RefreshList.class, msg ->{
-                    servers.clear();
-                    servers.addAll(msg.getServers());
+                    servers = msg.getServers();
                 })
                 .match(GetServer.class, msg->{
                     getSender().tell(servers.get(rand.nextInt(servers.size())), ActorRef.noSender());
