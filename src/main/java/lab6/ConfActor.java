@@ -1,6 +1,7 @@
 package lab6;
 
 import akka.actor.AbstractActor;
+import lab6.Messages.RefreshList;
 
 import java.util.ArrayList;
 
@@ -9,6 +10,10 @@ public class ConfActor extends AbstractActor {
 
     @Override
     public Receive createReceive() {
-
+        return receiveBuilder().create()
+                .match(RefreshList.class, msg ->{
+                    servers.rep
+                })
+                .match().build();
     }
 }
