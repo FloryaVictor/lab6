@@ -1,6 +1,7 @@
 package lab6;
 
 import akka.actor.AbstractActor;
+import akka.actor.ActorRef;
 import akka.japi.pf.ReceiveBuilder;
 import lab6.Messages.GetServer;
 import lab6.Messages.RefreshList;
@@ -21,8 +22,7 @@ public class ConfActor extends AbstractActor {
                     servers.addAll(msg.getServers());
                 })
                 .match(GetServer.class, msg->{
-                    int index =
-                    sender().tell(servers.get(rand.nextInt()));
+                    getSender().tell(servers.get(rand.nextInt(servers.size())), ActorRef.noSender());
                 })
                 .build();
     }
