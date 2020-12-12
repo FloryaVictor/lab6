@@ -13,15 +13,12 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] argv) throws IOException {
-        ActorSystem system = ActorSystem.create("routes");
-        final Http http = Http.get(system);
-        final ActorMaterializer materializer = ActorMaterializer.create(system);
-        Server s = new Server(8081, system, materializer, null);
-        Server s1 = new Server(8082, system, materializer, null);
-        Server s2 = new Server(8083, system, materializer, null);
-        s2.start();
-        s1.start();
-        s.start();
+//        ActorSystem system = ActorSystem.create("routes");
+//        final Http http = Http.get(system);
+//        final ActorMaterializer materializer = ActorMaterializer.create(system);
+//        Server s = new Server(8081, system, materializer, null);
+//        s.start();
+        System.out.println(argv[0]);
     }
 
 }
