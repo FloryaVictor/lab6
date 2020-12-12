@@ -43,13 +43,12 @@ public class Server {
     public static ZooKeeper keeper;
 
     public static void main(String[] argv) throws IOException, KeeperException, InterruptedException {
-
+        PORT = Integer.parseInt(argv[0]);
         keeper = new ZooKeeper(zookeeperConnectString,
                 (int)timeout.getSeconds() * 1000, watcher);
 
         keeper.create("/servers/" + PORT, (PORT+"").getBytes(),
                 ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
-        PORT = Integer.parseInt(argv[0]);
         ActorSystem system = ActorSystem.create("routes");
         http = Http.get(system);
         confActor = system.actorOf(Props.create(ConfActor.class));
