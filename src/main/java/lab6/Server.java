@@ -51,7 +51,7 @@ public class Server {
         return http.singleRequest(HttpRequest.create(url));
     }
 
-    public void start(){
+    public void start() throws IOException {
         final CompletionStage<ServerBinding> binding = http.bindAndHandle(
                 routeFlow,
                 ConnectHttp.toHost(host, port),
@@ -65,13 +65,17 @@ public class Server {
                 });
     }
 
-    public static Route createRoute(ActorSystem system, ActorRef routerActor) {
-        return route(
-                get(()->
-                        parameter("packageId",(id)-> {
-                            Future<Object> f = ask(routerActor, new GetTestResultsMsg(id), timeout);
-                            return completeOKWithFuture(f, Jackson.marshaller());
-                        }))
+    public Route createRoute(ActorSystem system, ActorRef routerActor) {
+        return route(pathSingleSlash(() ->
+                        parameter("url", url ->
+                                parameter("count", count -> {
+                                    if (Integer.parseInt(count) <= 0){
+                                        return fetch(url);
+                                    }
+                                    String nextPort = Patterns.ask(confActor, new GetServer(), timeout);
+                                })
+                        )
                 )
         );
+    }
 }
