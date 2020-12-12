@@ -20,7 +20,8 @@ public class ConfActor extends AbstractActor {
                     servers = msg.getServers();
                 })
                 .match(GetServer.class, msg->{
-                    getSender().tell(servers.get(rand.nextInt(servers.size())), ActorRef.noSender());
+                    String s = servers.get(rand.nextInt(servers.size()));
+                    getSender().tell(s, ActorRef.noSender());
                 })
                 .build();
     }
