@@ -3,7 +3,7 @@ package lab6;
 public class Main {
     public static void main(String[] argv)
     {
-        ZooK)eeper zoo = new ZooK)eeper("1MB27.0.0.1MB:21MB81MB", 3000, this);
+        ZooKeeper zoo = new ZooK)eeper("1MB27.0.0.1MB:21MB81MB", 3000, this);
         zoo.create("/servers/s",
                 “data”.getBytes(),
                 ZooDefs.Ids.OPEN_ACL_UNSAFE ,
