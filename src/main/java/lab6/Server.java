@@ -74,7 +74,7 @@ public class Server {
                 watchedEvent.getType() == Watcher.Event.EventType.NodeDataChanged){
             ArrayList<String> newServers;
             for(String s: keeper.getChildren("/servers", this)){
-                byte[] port = keeper.getData(s, )
+                byte[] port = keeper.getData()
             }
         }
     };
