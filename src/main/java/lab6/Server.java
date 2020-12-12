@@ -39,7 +39,7 @@ public class Server {
     public static ActorRef confActor;
 
     public static void main(String[] argv) throws IOException {
-        ZooKeeper keeper = new ZooKeeper()
+        ZooKeeper keeper = new ZooKeeper(HOST + ":" + PORT, )
 
         PORT = Integer.parseInt(argv[0]);
         ActorSystem system = ActorSystem.create("routes");
