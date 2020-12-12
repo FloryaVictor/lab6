@@ -36,7 +36,8 @@ public class Server {
     public static final String COUNT = "count";
     private final static Duration timeout = Duration.ofSeconds(5);
     public static int PORT;
-    public static String HOST = "localhost";
+    public static final String HOST = "localhost";
+    public static final String zookeeperConnectString  = ;
     public static Http http;
     public static ActorRef confActor;
 
