@@ -69,15 +69,12 @@ public class Server {
                                     if (Integer.parseInt(count) <= 0){
                                         return completeWithFuture(fetch(url));
                                     }
-                                    String nextPort = null;
-//                                    try {
-////                                        nextPort = (String)Patterns.ask(confActor, new GetServer(), timeout).toCompletableFuture().get();
-//                                    } catch (InterruptedException | ExecutionException e) {
-//                                        e.printStackTrace();
-//                                    }
-                                    return completeWithFuture(fetch(String.format(
-                                            "%s:%s?url=%s&count=%d",
-                                            HOST, null, url, Integer.parseInt(count) - 1)));
+                                    return completeWithFuture(Patterns.ask(confActor, new GetServer(), timeout)
+                                            .thenApply(nextPort -> (String)nextPort)
+                                            .thenCompose(nextPort ->
+                                                    fetch(String.format(
+                                                        "http://%s:%s?url=%s&count=%d",
+                                                        HOST, null, url, Integer.parseInt(count) - 1))));
                                 })
                         )
                 )
