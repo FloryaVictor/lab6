@@ -10,6 +10,7 @@ import akka.http.javadsl.ServerBinding;
 import akka.http.javadsl.model.HttpRequest;
 import akka.http.javadsl.model.HttpResponse;
 import akka.http.javadsl.model.Query;
+import akka.pattern.Patterns;
 import akka.stream.ActorMaterializer;
 import akka.stream.javadsl.Flow;
 
@@ -47,7 +48,7 @@ public class Server {
                     String url = q.get(URL).get();
                     int count = Integer.parseInt(q.get(COUNT).get());
                     if (count >=0){
-                        return 
+                        return Patterns.ask()
                     }else {
                         return fetch(url).thenApply(
                                 resp ->{return resp;}
