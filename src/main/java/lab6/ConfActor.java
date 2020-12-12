@@ -21,7 +21,7 @@ public class ConfActor extends AbstractActor {
                 })
                 .match(GetServer.class, msg->{
                     int index =
-                    sender().tell();
+                    sender().tell(servers.get());
                 })
                 .build();
     }
