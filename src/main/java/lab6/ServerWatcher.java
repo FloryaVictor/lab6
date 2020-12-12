@@ -7,6 +7,9 @@ import org.apache.zookeeper.Watcher;
 
 public class ServerWatcher implements Watcher {
     private final ActorRef confActor;
+    public ServerWatcher(){
+
+    }
 
     @Override
     public void process(WatchedEvent watchedEvent) {
