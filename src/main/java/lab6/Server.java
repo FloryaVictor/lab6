@@ -1,6 +1,8 @@
 package lab6;
 
 import akka.NotUsed;
+import akka.actor.Actor;
+import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.http.javadsl.ConnectHttp;
 import akka.http.javadsl.Http;
@@ -23,11 +25,13 @@ public class Server {
     public final String host;
     public final ActorSystem system;
     public final ActorMaterializer mat;
+    public final ActorRef confActor;
 
-    public Server(int port, ActorSystem system, ActorMaterializer mat){
+    public Server(int port, ActorSystem system, ActorMaterializer mat, ActorRef confActor){
         this.port = port;
         this.system = system;
         this.mat = mat;
+        this.confActor = confActor;
         this.host = "localhost";
         http = Http.get(system);
     }
@@ -43,7 +47,7 @@ public class Server {
                     String url = q.get(URL).get();
                     int count = Integer.parseInt(q.get(COUNT).get());
                     if (count >=0){
-                        return
+                        return 
                     }else {
                         return fetch(url).thenApply(
                                 resp ->{return resp;}
