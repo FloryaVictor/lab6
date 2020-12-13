@@ -56,6 +56,7 @@ public class Main {
                     system.terminate();
                 });
     }
+    
     public static void initZooKeeper() throws IOException, KeeperException, InterruptedException {
         keeper = new ZooKeeper(zookeeperConnectString,
                 (int)timeout.getSeconds() * 1000, watcher);
