@@ -23,7 +23,7 @@ import java.util.concurrent.CompletionStage;
 import lab6.Messages.GetServer;
 import lab6.Messages.RefreshList;
 
-public class Main {
+public class Server {
     public static final String URL = "url";
     public static final String COUNT = "count";
     private static final Duration timeout = Duration.ofSeconds(5);
@@ -56,7 +56,7 @@ public class Main {
                     system.terminate();
                 });
     }
-    
+
     public static void initZooKeeper() throws IOException, KeeperException, InterruptedException {
         keeper = new ZooKeeper(zookeeperConnectString,
                 (int)timeout.getSeconds() * 1000, watcher);
